@@ -8,14 +8,14 @@ using Dapper;
 
 using Hangfire.Annotations;
 using Hangfire.Logging;
-using Hangfire.Oracle.Core.JobQueue;
-using Hangfire.Oracle.Core.Monitoring;
+using Hangfire.Tibero.Core.JobQueue;
+using Hangfire.Tibero.Core.Monitoring;
 using Hangfire.Server;
 using Hangfire.Storage;
 
 using Oracle.ManagedDataAccess.Client;
 
-namespace Hangfire.Oracle.Core
+namespace Hangfire.Tibero.Core
 {
     public class OracleStorage : JobStorage, IDisposable
     {
@@ -114,7 +114,7 @@ namespace Hangfire.Oracle.Core
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                _string = "Hangfire.Oracle.Core";
+                _string = "Hangfire.Tibero.Core";
                 return _string;
             }
 
@@ -136,7 +136,7 @@ namespace Hangfire.Oracle.Core
                     }
                 }
 
-                _string = $"Hangfire.Oracle.Core: {builder}";
+                _string = $"Hangfire.Tibero.Core: {builder}";
                 return _string;
             }
             catch (Exception ex)

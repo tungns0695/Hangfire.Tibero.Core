@@ -8,7 +8,7 @@ using Dapper;
 
 using Hangfire.Logging;
 
-namespace Hangfire.Oracle.Core
+namespace Hangfire.Tibero.Core
 {
     public static class OracleObjectsInstaller
     {
@@ -25,7 +25,7 @@ namespace Hangfire.Oracle.Core
 
             Log.Info("Start installing Hangfire SQL objects...");
 
-            var script = GetStringResource("Hangfire.Oracle.Core.Install.sql");
+            var script = GetStringResource("Hangfire.Tibero.Core.Install.sql");
 
             var sqlCommands = script.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             sqlCommands.ToList().ForEach(s => connection.Execute(s));

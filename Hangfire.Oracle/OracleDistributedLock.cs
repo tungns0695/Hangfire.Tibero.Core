@@ -6,7 +6,7 @@ using Dapper;
 
 using Hangfire.Logging;
 
-namespace Hangfire.Oracle.Core
+namespace Hangfire.Tibero.Core
 {
     public class OracleDistributedLock : IDisposable, IComparable
     {

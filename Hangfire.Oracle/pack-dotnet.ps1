@@ -1,1 +1,1 @@
-dotnet pack Hangfire.Oracle.Core.csproj --configuration Release /p:PackageVersion=$Args
+dotnet pack Hangfire.Tibero.Core.csproj --configuration Release /p:PackageVersion=$Args

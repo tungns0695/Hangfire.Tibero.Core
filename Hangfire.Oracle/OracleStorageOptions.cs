@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Hangfire.Oracle.Core
+namespace Hangfire.Tibero.Core
 {
     public class OracleStorageOptions
     {

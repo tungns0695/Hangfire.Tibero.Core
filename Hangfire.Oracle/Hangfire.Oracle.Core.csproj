@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Title>Hangfire.Oracle.Core</Title>
+    <Title>Hangfire.Tibero.Core</Title>
     <Summary>Hangfire's Oracle storage</Summary>
     <Description>Hangfire's Oracle storage.</Description>
-    <PackageId>Hangfire.Oracle.Core</PackageId>
-    <Product>Hangfire.Oracle.Core</Product>
+    <PackageId>Hangfire.Tibero.Core</PackageId>
+    <Product>Hangfire.Tibero.Core</Product>
     <Company>akoylu</Company>
     <Authors>akoylu</Authors>
     <Owners>Ahmet Köylü</Owners>
-    <PackageLicenseUrl>https://github.com/akoylu/Hangfire.Oracle.Core/blob/master/License.md</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/akoylu/Hangfire.Oracle.Core</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/akoylu/Hangfire.Tibero.Core/blob/master/License.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/akoylu/Hangfire.Tibero.Core</PackageProjectUrl>
     <Copyright>Copyright 2020</Copyright>
-    <PackageTags>Hangfire Oracle Hangfire.Oracle Hangfire.Oracle.Core</PackageTags>
+    <PackageTags>Hangfire Oracle Hangfire.Oracle Hangfire.Tibero.Core</PackageTags>
     <Version>1.3.0</Version>
     <AssemblyVersion>1.3.0.0</AssemblyVersion>
-    <AssemblyName>Hangfire.Oracle.Core</AssemblyName>
-    <RootNamespace>Hangfire.Oracle.Core</RootNamespace>
+    <AssemblyName>Hangfire.Tibero.Core</AssemblyName>
+    <RootNamespace>Hangfire.Tibero.Core</RootNamespace>
     <PackageReleaseNotes>Fix missing prefix in merge query</PackageReleaseNotes>
     <PackageVersion>1.3.1</PackageVersion>
   </PropertyGroup>

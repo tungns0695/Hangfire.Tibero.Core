@@ -1,1 +1,1 @@
-nuget pack Hangfire.Oracle.Core.csproj -IncludeReferencedProjects -Prop Configuration=Release -version $Args
+nuget pack Hangfire.Tibero.Core.csproj -IncludeReferencedProjects -Prop Configuration=Release -version $Args

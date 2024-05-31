@@ -1,4 +1,4 @@
-﻿namespace Hangfire.Oracle.Core.Entities
+﻿namespace Hangfire.Tibero.Core.Entities
 {
     internal class JobParameter
     {

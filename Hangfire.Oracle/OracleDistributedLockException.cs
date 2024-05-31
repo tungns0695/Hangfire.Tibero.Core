@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hangfire.Oracle.Core
+namespace Hangfire.Tibero.Core
 {
     public class OracleDistributedLockException : Exception
     {

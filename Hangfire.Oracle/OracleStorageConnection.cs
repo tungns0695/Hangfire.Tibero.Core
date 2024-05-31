@@ -9,11 +9,11 @@ using Dapper.Oracle;
 
 using Hangfire.Common;
 using Hangfire.Logging;
-using Hangfire.Oracle.Core.Entities;
+using Hangfire.Tibero.Core.Entities;
 using Hangfire.Server;
 using Hangfire.Storage;
 
-namespace Hangfire.Oracle.Core
+namespace Hangfire.Tibero.Core
 {
     public class OracleStorageConnection : JobStorageConnection
     {
