@@ -1,24 +1,8 @@
-# Hangfire.Oracle.Core Implementation
+# Hangfire.Tibero.Core Implementation
 
 Hangfire.Tibero.Core is based on Hangfire.MySqlStorage(https://github.com/arnoldasgudas/Hangfire.MySqlStorage)
 
-I fixed some bugs and support .net standard 2.0.
-
-[![Build status](https://ci.appveyor.com/api/projects/status/fuhr415en9uu89h7?svg=true)](https://ci.appveyor.com/project/AhmetKoylu/hangfire-oracle-core)
-[![Latest version](https://img.shields.io/nuget/v/Hangfire.Tibero.Core.svg)](https://www.nuget.org/packages/Hangfire.Tibero.Core/) 
-
 Tibero storage implementation of [Hangfire](http://hangfire.io/) - fire-and-forget, delayed and recurring tasks runner for .NET. Scalable and reliable background job runner. Supports multiple servers, CPU and I/O intensive, long-running and short-running jobs.
-
-**Some features of Tibero storage implementation is under development!**
-
-## Installation
-Install Tibero
-
-Run the following command in the NuGet Package Manager console to install Hangfire.Tibero.Core:
-
-```
-Install-Package Hangfire.Tibero.Core
-```
 
 ## Usage
 
