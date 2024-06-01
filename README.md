@@ -1,39 +1,39 @@
 # Hangfire.Oracle.Core Implementation
 
-Hangfire.Oracle.Core is based on Hangfire.MySqlStorage(https://github.com/arnoldasgudas/Hangfire.MySqlStorage)
+Hangfire.Tibero.Core is based on Hangfire.MySqlStorage(https://github.com/arnoldasgudas/Hangfire.MySqlStorage)
 
 I fixed some bugs and support .net standard 2.0.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/fuhr415en9uu89h7?svg=true)](https://ci.appveyor.com/project/AhmetKoylu/hangfire-oracle-core)
-[![Latest version](https://img.shields.io/nuget/v/Hangfire.Oracle.Core.svg)](https://www.nuget.org/packages/Hangfire.Oracle.Core/) 
+[![Latest version](https://img.shields.io/nuget/v/Hangfire.Tibero.Core.svg)](https://www.nuget.org/packages/Hangfire.Tibero.Core/) 
 
-Oracle storage implementation of [Hangfire](http://hangfire.io/) - fire-and-forget, delayed and recurring tasks runner for .NET. Scalable and reliable background job runner. Supports multiple servers, CPU and I/O intensive, long-running and short-running jobs.
+Tibero storage implementation of [Hangfire](http://hangfire.io/) - fire-and-forget, delayed and recurring tasks runner for .NET. Scalable and reliable background job runner. Supports multiple servers, CPU and I/O intensive, long-running and short-running jobs.
 
-**Some features of Oracle storage implementation is under development!**
+**Some features of Tibero storage implementation is under development!**
 
 ## Installation
-Install Oracle
+Install Tibero
 
-Run the following command in the NuGet Package Manager console to install Hangfire.Oracle.Core:
+Run the following command in the NuGet Package Manager console to install Hangfire.Tibero.Core:
 
 ```
-Install-Package Hangfire.Oracle.Core
+Install-Package Hangfire.Tibero.Core
 ```
 
 ## Usage
 
-Use one the following ways to initialize `OracleStorage`: 
-- Create new instance of `OracleStorage` with connection string constructor parameter and pass it to `Configuration` with `UseStorage` method:
+Use one the following ways to initialize `TiberoStorage`: 
+- Create new instance of `TiberoStorage` with connection string constructor parameter and pass it to `Configuration` with `UseStorage` method:
 ```csharp
   GlobalConfiguration.Configuration.UseStorage(
-    new OracleStorage(connectionString));
+    new TiberoStorage(connectionString));
 ```
-- Alternatively one or more options can be passed as a parameter to `OracleStorage`:
+- Alternatively one or more options can be passed as a parameter to `TiberoStorage`:
 ```csharp
 GlobalConfiguration.Configuration.UseStorage(
-    new OracleStorage(
+    new TiberoStorage(
         connectionString, 
-        new OracleStorageOptions
+        new TiberoStorageOptions
         {
             TransactionIsolationLevel = IsolationLevel.ReadCommitted,
             QueuePollInterval = TimeSpan.FromSeconds(15),
@@ -48,9 +48,9 @@ GlobalConfiguration.Configuration.UseStorage(
 - With version 1.1 you can provide your own connection factory.
 ```csharp
 GlobalConfiguration.Configuration.UseStorage(
-    new OracleStorage(
-        () => new OracleConnection(connectionString), 
-        new OracleStorageOptions
+    new TiberoStorage(
+        () => new TiberoConnection(connectionString), 
+        new TiberoStorageOptions
         {
             SchemaName = "HANGFIRE"
         }));
