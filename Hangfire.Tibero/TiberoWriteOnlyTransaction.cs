@@ -4,8 +4,6 @@ using System.Data;
 using System.Linq;
 
 using Dapper;
-using Dapper.Oracle;
-
 using Hangfire.Common;
 using Hangfire.Logging;
 using Hangfire.Tibero.Core.Entities;
@@ -14,15 +12,15 @@ using Hangfire.Storage;
 
 namespace Hangfire.Tibero.Core
 {
-    internal class OracleWriteOnlyTransaction : JobStorageTransaction
+    internal class TiberoWriteOnlyTransaction : JobStorageTransaction
     {
-        private static readonly ILog Logger = LogProvider.GetLogger(typeof(OracleWriteOnlyTransaction));
+        private static readonly ILog Logger = LogProvider.GetLogger(typeof(TiberoWriteOnlyTransaction));
 
-        private readonly OracleStorage _storage;
+        private readonly TiberoStorage _storage;
 
         private readonly Queue<Action<IDbConnection>> _commandQueue = new Queue<Action<IDbConnection>>();
 
-        public OracleWriteOnlyTransaction(OracleStorage storage)
+        public TiberoWriteOnlyTransaction(TiberoStorage storage)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
@@ -57,8 +55,8 @@ namespace Hangfire.Tibero.Core
 
             var stateId = _storage.UseConnection(connection => connection.GetNextId());
 
-            var oracleDynamicParameters = new OracleDynamicParameters();
-            oracleDynamicParameters.AddDynamicParams(new
+            var tiberoDynamicParameters = new DynamicParameters();
+            tiberoDynamicParameters.AddDynamicParams(new
             {
                 STATE_ID = stateId,
                 JOB_ID = jobId,
@@ -67,7 +65,7 @@ namespace Hangfire.Tibero.Core
                 CREATED_AT = DateTime.UtcNow,
                 ID = jobId
             });
-            oracleDynamicParameters.Add("DATA", SerializationHelper.Serialize(state.SerializeData(), SerializationOption.User), OracleMappingType.NClob, ParameterDirection.Input);
+            tiberoDynamicParameters.Add("DATA", SerializationHelper.Serialize(state.SerializeData(), SerializationOption.User));
 
             QueueCommand(x => x.Execute(
                 @"
@@ -78,7 +76,7 @@ BEGIN
       UPDATE HF_JOB SET STATE_ID = :STATE_ID, STATE_NAME = :NAME WHERE ID = :ID;
 END;
 ",
-                oracleDynamicParameters));
+                tiberoDynamicParameters));
         }
 
         public override void AddJobState(string jobId, IState state)
@@ -87,19 +85,19 @@ END;
 
             AcquireStateLock();
 
-            var oracleDynamicParameters = new OracleDynamicParameters();
-            oracleDynamicParameters.AddDynamicParams(new
+            var tiberoDynamicParameters = new DynamicParameters();
+            tiberoDynamicParameters.AddDynamicParams(new
             {
                 JOB_ID = jobId,
                 NAME = state.Name,
                 REASON = state.Reason,
                 CREATED_AT = DateTime.UtcNow
             });
-            oracleDynamicParameters.Add("DATA", SerializationHelper.Serialize(state.SerializeData(), SerializationOption.User), OracleMappingType.NClob, ParameterDirection.Input);
+            tiberoDynamicParameters.Add("DATA", SerializationHelper.Serialize(state.SerializeData(), SerializationOption.User));
 
             QueueCommand(x => x.Execute(
                 " INSERT INTO HF_JOB_STATE (ID, JOB_ID, NAME, REASON, CREATED_AT, DATA) " +
-                "      VALUES (HF_SEQUENCE.NEXTVAL, :JOB_ID, :NAME, :REASON, :CREATED_AT, :DATA)", oracleDynamicParameters));
+                "      VALUES (HF_SEQUENCE.NEXTVAL, :JOB_ID, :NAME, :REASON, :CREATED_AT, :DATA)", tiberoDynamicParameters));
         }
 
         public override void AddToQueue(string queue, string jobId)
@@ -225,11 +223,11 @@ END;
 
             AcquireListLock();
 
-            var oracleDynamicParameters = new OracleDynamicParameters();
-            oracleDynamicParameters.Add("KEY", key);
-            oracleDynamicParameters.Add("VALUE", value, OracleMappingType.NClob, ParameterDirection.Input);
+            var tiberoDynamicParameters = new DynamicParameters();
+            tiberoDynamicParameters.Add("KEY", key);
+            tiberoDynamicParameters.Add("VALUE", value);
 
-            QueueCommand(x => x.Execute("INSERT INTO HF_LIST (ID, KEY, VALUE) VALUES (HF_SEQUENCE.NEXTVAL, :KEY, :VALUE)", oracleDynamicParameters));
+            QueueCommand(x => x.Execute("INSERT INTO HF_LIST (ID, KEY, VALUE) VALUES (HF_SEQUENCE.NEXTVAL, :KEY, :VALUE)", tiberoDynamicParameters));
         }
         
         public override void ExpireList(string key, TimeSpan expireIn)

@@ -10,13 +10,13 @@ using Hangfire.Storage;
 
 namespace Hangfire.Tibero.Core.JobQueue
 {
-    internal class OracleJobQueue : IPersistentJobQueue
+    internal class TiberoJobQueue : IPersistentJobQueue
     {
-        private static readonly ILog Logger = LogProvider.GetLogger(typeof(OracleJobQueue));
+        private static readonly ILog Logger = LogProvider.GetLogger(typeof(TiberoJobQueue));
 
-        private readonly OracleStorage _storage;
-        private readonly OracleStorageOptions _options;
-        public OracleJobQueue(OracleStorage storage, OracleStorageOptions options)
+        private readonly TiberoStorage _storage;
+        private readonly TiberoStorageOptions _options;
+        public TiberoJobQueue(TiberoStorage storage, TiberoStorageOptions options)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -37,7 +37,7 @@ namespace Hangfire.Tibero.Core.JobQueue
 
                 try
                 {
-                    using (new OracleDistributedLock(_storage, "JobQueue", TimeSpan.FromSeconds(30)))
+                    using (new TiberoDistributedLock(_storage, "JobQueue", TimeSpan.FromSeconds(30)))
                     {
                         var token = Guid.NewGuid().ToString();
 
@@ -86,7 +86,7 @@ UPDATE HF_JOB_QUEUE
                 }
             } while (fetchedJob == null);
 
-            return new OracleFetchedJob(_storage, connection, fetchedJob);
+            return new TiberoFetchedJob(_storage, connection, fetchedJob);
         }
 
         public void Enqueue(IDbConnection connection, string queue, string jobId)

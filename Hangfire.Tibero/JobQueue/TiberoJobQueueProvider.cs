@@ -2,12 +2,12 @@
 
 namespace Hangfire.Tibero.Core.JobQueue
 {
-    internal class OracleJobQueueProvider : IPersistentJobQueueProvider
+    internal class TiberoJobQueueProvider : IPersistentJobQueueProvider
     {
         private readonly IPersistentJobQueue _jobQueue;
         private readonly IPersistentJobQueueMonitoringApi _monitoringApi;
 
-        public OracleJobQueueProvider(OracleStorage storage, OracleStorageOptions options)
+        public TiberoJobQueueProvider(TiberoStorage storage, TiberoStorageOptions options)
         {
             if (storage == null)
             {
@@ -19,8 +19,8 @@ namespace Hangfire.Tibero.Core.JobQueue
                 throw new ArgumentNullException(nameof(options));
             }
 
-            _jobQueue = new OracleJobQueue(storage, options);
-            _monitoringApi = new OracleJobQueueMonitoringApi(storage);
+            _jobQueue = new TiberoJobQueue(storage, options);
+            _monitoringApi = new TiberoJobQueueMonitoringApi(storage);
         }
 
         public IPersistentJobQueue GetJobQueue()

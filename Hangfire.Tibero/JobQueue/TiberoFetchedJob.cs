@@ -9,18 +9,18 @@ using Hangfire.Storage;
 
 namespace Hangfire.Tibero.Core.JobQueue
 {
-    internal class OracleFetchedJob : IFetchedJob
+    internal class TiberoFetchedJob : IFetchedJob
     {
-        private static readonly ILog Logger = LogProvider.GetLogger(typeof(OracleFetchedJob));
+        private static readonly ILog Logger = LogProvider.GetLogger(typeof(TiberoFetchedJob));
 
-        private readonly OracleStorage _storage;
+        private readonly TiberoStorage _storage;
         private readonly IDbConnection _connection;
         private readonly int _id;
         private bool _removedFromQueue;
         private bool _requeued;
         private bool _disposed;
 
-        public OracleFetchedJob(OracleStorage storage, IDbConnection connection, FetchedJob fetchedJob)
+        public TiberoFetchedJob(TiberoStorage storage, IDbConnection connection, FetchedJob fetchedJob)
         {
             if (fetchedJob == null)
             {

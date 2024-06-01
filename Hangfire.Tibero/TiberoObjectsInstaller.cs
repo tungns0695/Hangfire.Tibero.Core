@@ -10,9 +10,9 @@ using Hangfire.Logging;
 
 namespace Hangfire.Tibero.Core
 {
-    public static class OracleObjectsInstaller
+    public static class TiberoObjectsInstaller
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(OracleStorage));
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(TiberoStorage));
         public static void Install(IDbConnection connection, string schemaName)
         {
             if (connection == null) throw new ArgumentNullException(nameof(connection));
@@ -58,9 +58,9 @@ ORDER BY TABLE_NAME";
         private static string GetStringResource(string resourceName)
         {
 #if NET45
-            var assembly = typeof(OracleObjectsInstaller).Assembly;
+            var assembly = typeof(TiberoObjectsInstaller).Assembly;
 #else
-            var assembly = typeof(OracleObjectsInstaller).GetTypeInfo().Assembly;
+            var assembly = typeof(TiberoObjectsInstaller).GetTypeInfo().Assembly;
 #endif
 
             using (var stream = assembly.GetManifestResourceStream(resourceName))

@@ -6,15 +6,15 @@ using Dapper;
 
 namespace Hangfire.Tibero.Core.JobQueue
 {
-    internal class OracleJobQueueMonitoringApi : IPersistentJobQueueMonitoringApi
+    internal class TiberoJobQueueMonitoringApi : IPersistentJobQueueMonitoringApi
     {
         private static readonly TimeSpan QueuesCacheTimeout = TimeSpan.FromSeconds(5);
         private readonly object _cacheLock = new object();
         private List<string> _queuesCache = new List<string>();
         private DateTime _cacheUpdated;
 
-        private readonly OracleStorage _storage;
-        public OracleJobQueueMonitoringApi(OracleStorage storage)
+        private readonly TiberoStorage _storage;
+        public TiberoJobQueueMonitoringApi(TiberoStorage storage)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }

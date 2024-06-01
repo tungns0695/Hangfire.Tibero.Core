@@ -12,28 +12,27 @@ using Hangfire.Tibero.Core.JobQueue;
 using Hangfire.Tibero.Core.Monitoring;
 using Hangfire.Server;
 using Hangfire.Storage;
-
-using Oracle.ManagedDataAccess.Client;
+using Tibero.DataAccess.Client;
 
 namespace Hangfire.Tibero.Core
 {
-    public class OracleStorage : JobStorage, IDisposable
+    public class TiberoStorage : JobStorage, IDisposable
     {
-        private static readonly ILog Logger = LogProvider.GetLogger(typeof(OracleStorage));
+        private static readonly ILog Logger = LogProvider.GetLogger(typeof(TiberoStorage));
 
         private string _string;
         private readonly string _connectionString;
         private readonly Func<IDbConnection> _connectionFactory;
-        private readonly OracleStorageOptions _options;
+        private readonly TiberoStorageOptions _options;
 
         public virtual PersistentJobQueueProviderCollection QueueProviders { get; private set; }
 
-        public OracleStorage(string connectionString)
-            : this(connectionString, new OracleStorageOptions())
+        public TiberoStorage(string connectionString)
+            : this(connectionString, new TiberoStorageOptions())
         {
         }
 
-        public OracleStorage(string connectionString, OracleStorageOptions options)
+        public TiberoStorage(string connectionString, TiberoStorageOptions options)
         {
             if (connectionString == null)
             {
@@ -55,7 +54,7 @@ namespace Hangfire.Tibero.Core
             InitializeQueueProviders();
         }       
      
-        public OracleStorage(Func<IDbConnection> connectionFactory, OracleStorageOptions options)
+        public TiberoStorage(Func<IDbConnection> connectionFactory, TiberoStorageOptions options)
         {
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
 
@@ -65,20 +64,20 @@ namespace Hangfire.Tibero.Core
             InitializeQueueProviders();
         }
 
-        private void PrepareSchemaIfNecessary(OracleStorageOptions options)
+        private void PrepareSchemaIfNecessary(TiberoStorageOptions options)
         {
             if (options.PrepareSchemaIfNecessary)
             {
                 using (var connection = CreateAndOpenConnection())
                 {
-                    OracleObjectsInstaller.Install(connection, options.SchemaName);
+                    TiberoObjectsInstaller.Install(connection, options.SchemaName);
                 }
             }
         }
 
         private void InitializeQueueProviders()
         {
-            QueueProviders = new PersistentJobQueueProviderCollection(new OracleJobQueueProvider(this, _options));
+            QueueProviders = new PersistentJobQueueProviderCollection(new TiberoJobQueueProvider(this, _options));
         }
 
 #pragma warning disable 618
@@ -149,12 +148,12 @@ namespace Hangfire.Tibero.Core
 
         public override IMonitoringApi GetMonitoringApi()
         {
-            return new OracleMonitoringApi(this, _options.DashboardJobListLimit);
+            return new TiberoMonitoringApi(this, _options.DashboardJobListLimit);
         }
 
         public override IStorageConnection GetConnection()
         {
-            return new OracleStorageConnection(this);
+            return new TiberoStorageConnection(this);
         }
 
         private static bool IsConnectionString(string nameOrConnectionString)
@@ -211,7 +210,7 @@ namespace Hangfire.Tibero.Core
 
         internal IDbConnection CreateAndOpenConnection()
         {
-            var connection = _connectionFactory != null ? _connectionFactory() : new OracleConnection(_connectionString);
+            var connection = _connectionFactory != null ? _connectionFactory() : new TiberoConnection(_connectionString);
 
             if (connection.State == ConnectionState.Closed)
             {

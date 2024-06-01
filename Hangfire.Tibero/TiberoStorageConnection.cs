@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 
 using Dapper;
-using Dapper.Oracle;
 
 using Hangfire.Common;
 using Hangfire.Logging;
@@ -15,24 +14,24 @@ using Hangfire.Storage;
 
 namespace Hangfire.Tibero.Core
 {
-    public class OracleStorageConnection : JobStorageConnection
+    public class TiberoStorageConnection : JobStorageConnection
     {
-        private static readonly ILog Logger = LogProvider.GetLogger(typeof(OracleStorageConnection));
+        private static readonly ILog Logger = LogProvider.GetLogger(typeof(TiberoStorageConnection));
 
-        private readonly OracleStorage _storage;
-        public OracleStorageConnection(OracleStorage storage)
+        private readonly TiberoStorage _storage;
+        public TiberoStorageConnection(TiberoStorage storage)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
 
         public override IWriteOnlyTransaction CreateWriteTransaction()
         {
-            return new OracleWriteOnlyTransaction(_storage);
+            return new TiberoWriteOnlyTransaction(_storage);
         }
 
         public override IDisposable AcquireDistributedLock(string resource, TimeSpan timeout)
         {
-            return new OracleDistributedLock(_storage, resource, timeout).Acquire();
+            return new TiberoDistributedLock(_storage, resource, timeout).Acquire();
         }
 
         public override string CreateExpiredJob(Job job, IDictionary<string, string> parameters, DateTime createdAt, TimeSpan expireIn)
@@ -57,22 +56,22 @@ namespace Hangfire.Tibero.Core
             {
                 var jobId = connection.GetNextJobId();
 
-                var oracleDynamicParameters = new OracleDynamicParameters();
-                oracleDynamicParameters.AddDynamicParams(new
+                var tiberoDynamicParameters = new DynamicParameters();
+                tiberoDynamicParameters.AddDynamicParams(new
                 {
                     ID = jobId,
                     CREATED_AT = createdAt,
                     EXPIRE_AT = createdAt.Add(expireIn)
                 });
-                oracleDynamicParameters.Add("INVOCATION_DATA", SerializationHelper.Serialize(invocationData, SerializationOption.User), OracleMappingType.NClob, ParameterDirection.Input);
-                oracleDynamicParameters.Add("ARGUMENTS", arguments.Arguments, OracleMappingType.NClob, ParameterDirection.Input);
+                tiberoDynamicParameters.Add("INVOCATION_DATA", SerializationHelper.Serialize(invocationData, SerializationOption.User));
+                tiberoDynamicParameters.Add("ARGUMENTS", arguments.Arguments);
 
                 connection.Execute(
                     @" 
  INSERT INTO HF_JOB (ID, INVOCATION_DATA, ARGUMENTS, CREATED_AT, EXPIRE_AT) 
       VALUES (:ID, :INVOCATION_DATA, :ARGUMENTS, :CREATED_AT, :EXPIRE_AT)
 ",
-                    oracleDynamicParameters);
+                    tiberoDynamicParameters);
 
                 if (parameters.Count > 0)
                 {
@@ -80,13 +79,13 @@ namespace Hangfire.Tibero.Core
                     var parameterIndex = 0;
                     foreach (var parameter in parameters)
                     {
-                        var dynamicParameters = new OracleDynamicParameters();
+                        var dynamicParameters = new DynamicParameters();
                         dynamicParameters.AddDynamicParams(new
                         {
                             JOB_ID = jobId,
                             NAME = parameter.Key
                         });
-                        dynamicParameters.Add("VALUE", parameter.Value, OracleMappingType.NClob, ParameterDirection.Input);
+                        dynamicParameters.Add("VALUE", parameter.Value);
 
                         parameterArray[parameterIndex++] = dynamicParameters;
                     }
@@ -134,9 +133,9 @@ namespace Hangfire.Tibero.Core
 
             _storage.UseConnection(connection =>
             {
-                var oracleDynamicParameters = new OracleDynamicParameters();
-                oracleDynamicParameters.AddDynamicParams(new { JOB_ID = id, NAME = name });
-                oracleDynamicParameters.Add("VALUE", value, OracleMappingType.NClob, ParameterDirection.Input);
+                var tiberoDynamicParameters = new DynamicParameters();
+                tiberoDynamicParameters.AddDynamicParams(new { JOB_ID = id, NAME = name });
+                tiberoDynamicParameters.Add("VALUE", value);
                 connection.Execute(
                     @" 
  MERGE INTO HF_JOB_PARAMETER JP
@@ -148,7 +147,7 @@ namespace Hangfire.Tibero.Core
       INSERT (ID, JOB_ID, NAME, VALUE)
       VALUES (HF_SEQUENCE.NEXTVAL, :JOB_ID, :NAME, :VALUE)
 ",
-                    oracleDynamicParameters);
+                    tiberoDynamicParameters);
             });
         }
 
@@ -582,9 +581,9 @@ SELECT VALUE as Value
             {
                 foreach (var keyValuePair in keyValuePairs)
                 {
-                    var oracleDynamicParameters = new OracleDynamicParameters();
-                    oracleDynamicParameters.AddDynamicParams(new { KEY = key, FIELD = keyValuePair.Key });
-                    oracleDynamicParameters.Add("VALUE", keyValuePair.Value, OracleMappingType.NClob, ParameterDirection.Input);
+                    var tiberoDynamicParameters = new DynamicParameters();
+                    tiberoDynamicParameters.AddDynamicParams(new { KEY = key, FIELD = keyValuePair.Key });
+                    tiberoDynamicParameters.Add("VALUE", keyValuePair.Value);
 
                     connection.Execute(
                         @"
@@ -597,7 +596,7 @@ SELECT VALUE as Value
      INSERT (ID, KEY, FIELD, VALUE)
      VALUES (HF_SEQUENCE.NEXTVAL, :KEY, :FIELD, :VALUE)
 ",
-                        oracleDynamicParameters);
+                        tiberoDynamicParameters);
                 }
             });
         }

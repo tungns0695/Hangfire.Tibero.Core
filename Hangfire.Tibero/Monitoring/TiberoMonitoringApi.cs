@@ -15,12 +15,12 @@ using Hangfire.Storage.Monitoring;
 
 namespace Hangfire.Tibero.Core.Monitoring
 {
-    internal class OracleMonitoringApi : IMonitoringApi
+    internal class TiberoMonitoringApi : IMonitoringApi
     {
-        private readonly OracleStorage _storage;
+        private readonly TiberoStorage _storage;
         private readonly int? _jobListLimit;
 
-        public OracleMonitoringApi([NotNull] OracleStorage storage, int? jobListLimit)
+        public TiberoMonitoringApi([NotNull] TiberoStorage storage, int? jobListLimit)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _jobListLimit = jobListLimit;

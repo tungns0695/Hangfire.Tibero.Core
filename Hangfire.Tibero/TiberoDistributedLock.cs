@@ -8,17 +8,17 @@ using Hangfire.Logging;
 
 namespace Hangfire.Tibero.Core
 {
-    public class OracleDistributedLock : IDisposable, IComparable
+    public class TiberoDistributedLock : IDisposable, IComparable
     {
-        private static readonly ILog Logger = LogProvider.GetLogger(typeof(OracleDistributedLock));
+        private static readonly ILog Logger = LogProvider.GetLogger(typeof(TiberoDistributedLock));
         private readonly TimeSpan _timeout;
-        private readonly OracleStorage _storage;
+        private readonly TiberoStorage _storage;
         private readonly DateTime _start;
         private readonly CancellationToken _cancellationToken;
 
         private const int DelayBetweenPasses = 100;
 
-        public OracleDistributedLock(OracleStorage storage, string resource, TimeSpan timeout)
+        public TiberoDistributedLock(TiberoStorage storage, string resource, TimeSpan timeout)
             : this(storage.CreateAndOpenConnection(), resource, timeout)
         {
             _storage = storage;
@@ -26,14 +26,14 @@ namespace Hangfire.Tibero.Core
 
         private readonly IDbConnection _connection;
 
-        public OracleDistributedLock(IDbConnection connection, string resource, TimeSpan timeout)
+        public TiberoDistributedLock(IDbConnection connection, string resource, TimeSpan timeout)
             : this(connection, resource, timeout, new CancellationToken())
         {
         }
 
-        public OracleDistributedLock(IDbConnection connection, string resource, TimeSpan timeout, CancellationToken cancellationToken)
+        public TiberoDistributedLock(IDbConnection connection, string resource, TimeSpan timeout, CancellationToken cancellationToken)
         {
-            Logger.TraceFormat("OracleDistributedLock resource={0}, timeout={1}", resource, timeout);
+            Logger.TraceFormat("TiberoDistributedLock resource={0}, timeout={1}", resource, timeout);
 
             Resource = resource;
             _timeout = timeout;
@@ -73,7 +73,7 @@ INSERT INTO HF_DISTRIBUTED_LOCK (""RESOURCE"", CREATED_AT)
             _storage?.ReleaseConnection(_connection);
         }
 
-        internal OracleDistributedLock Acquire()
+        internal TiberoDistributedLock Acquire()
         {
             Logger.TraceFormat("Acquire resource={0}, timeout={1}", Resource, _timeout);
 
@@ -93,7 +93,7 @@ INSERT INTO HF_DISTRIBUTED_LOCK (""RESOURCE"", CREATED_AT)
 
             if (insertedObjectCount == 0)
             {
-                throw new OracleDistributedLockException("cannot acquire lock");
+                throw new TiberoDistributedLockException("cannot acquire lock");
             }
             return this;
         }
@@ -126,12 +126,12 @@ DELETE FROM HF_DISTRIBUTED_LOCK
                 return 1;
             }
 
-            if (obj is OracleDistributedLock oracleDistributedLock)
+            if (obj is TiberoDistributedLock tiberoDistributedLock)
             {
-                return string.Compare(Resource, oracleDistributedLock.Resource, StringComparison.OrdinalIgnoreCase);
+                return string.Compare(Resource, tiberoDistributedLock.Resource, StringComparison.OrdinalIgnoreCase);
             }
             
-            throw new ArgumentException("Object is not a OracleDistributedLock");
+            throw new ArgumentException("Object is not a TiberoDistributedLock");
         }
     }
 }

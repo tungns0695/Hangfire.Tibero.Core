@@ -3,11 +3,11 @@ using System.Data;
 
 namespace Hangfire.Tibero.Core
 {
-    public class OracleStorageOptions
+    public class TiberoStorageOptions
     {
         private TimeSpan _queuePollInterval;
 
-        public OracleStorageOptions()
+        public TiberoStorageOptions()
         {
             TransactionIsolationLevel = IsolationLevel.ReadCommitted;
             QueuePollInterval = TimeSpan.FromSeconds(15);

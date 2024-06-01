@@ -34,15 +34,15 @@ namespace Hangfire.Tibero.Core
             new Tuple<string, bool>("HF_JOB", false)
         };
 
-        private readonly OracleStorage _storage;
+        private readonly TiberoStorage _storage;
         private readonly TimeSpan _checkInterval;
 
-        public ExpirationManager(OracleStorage storage)
+        public ExpirationManager(TiberoStorage storage)
             : this(storage, TimeSpan.FromHours(1))
         {
         }
 
-        public ExpirationManager(OracleStorage storage, TimeSpan checkInterval)
+        public ExpirationManager(TiberoStorage storage, TimeSpan checkInterval)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _checkInterval = checkInterval;
@@ -64,7 +64,7 @@ namespace Hangfire.Tibero.Core
                         {
                             Logger.DebugFormat("Deleting records from table: {0}", tuple.Item1);
 
-                            using (new OracleDistributedLock(connection, DistributedLockKey, DefaultLockTimeout, cancellationToken).Acquire())
+                            using (new TiberoDistributedLock(connection, DistributedLockKey, DefaultLockTimeout, cancellationToken).Acquire())
                             {
                                 var query = $"DELETE FROM {tuple.Item1} WHERE EXPIRE_AT < :NOW AND ROWNUM <= :COUNT";
                                 if (tuple.Item2)

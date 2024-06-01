@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+	<TargetFramework>net6.0</TargetFramework>
+	<RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;../../tmp/Nuget</RestoreSources>
     <Title>Hangfire.Tibero.Core</Title>
-    <Summary>Hangfire's Oracle storage</Summary>
-    <Description>Hangfire's Oracle storage.</Description>
+    <Summary>Hangfire's Tibero storage</Summary>
+    <Description>Hangfire's Tibero storage.</Description>
     <PackageId>Hangfire.Tibero.Core</PackageId>
     <Product>Hangfire.Tibero.Core</Product>
     <Company>akoylu</Company>
@@ -12,7 +13,7 @@
     <PackageLicenseUrl>https://github.com/akoylu/Hangfire.Tibero.Core/blob/master/License.md</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/akoylu/Hangfire.Tibero.Core</PackageProjectUrl>
     <Copyright>Copyright 2020</Copyright>
-    <PackageTags>Hangfire Oracle Hangfire.Oracle Hangfire.Tibero.Core</PackageTags>
+    <PackageTags>Hangfire Tibero Hangfire.Tibero Hangfire.Tibero.Core</PackageTags>
     <Version>1.3.0</Version>
     <AssemblyVersion>1.3.0.0</AssemblyVersion>
     <AssemblyName>Hangfire.Tibero.Core</AssemblyName>
@@ -28,12 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper.Oracle" Version="1.0.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Dapper" Version="1.60.6" />
     <PackageReference Include="Hangfire.Core" Version="1.7.0" />
-    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.18.6" />
+	<PackageReference Include="Tibero.DataAccess" Version="1.1.22" />
   </ItemGroup>
 
   <ItemGroup>

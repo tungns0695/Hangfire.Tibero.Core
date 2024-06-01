@@ -17,10 +17,10 @@ namespace Hangfire.Tibero.Core
         private const int NumberOfRecordsInSinglePass = 1000;
         private static readonly TimeSpan DelayBetweenPasses = TimeSpan.FromMilliseconds(500);
 
-        private readonly OracleStorage _storage;
+        private readonly TiberoStorage _storage;
         private readonly TimeSpan _interval;
 
-        public CountersAggregator(OracleStorage storage, TimeSpan interval)
+        public CountersAggregator(TiberoStorage storage, TimeSpan interval)
         {
             _storage = storage ?? throw new ArgumentNullException(nameof(storage));
             _interval = interval;
